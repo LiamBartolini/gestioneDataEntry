@@ -1,6 +1,7 @@
 "use strict";
 
-var indice = 0;
+var indiceNominativi = 0;
+var indiceInseriti = 0;
 var isValid;
 var vale = false;
 var nominativi = [];
@@ -8,30 +9,42 @@ var inseriti = [];
 var blocco;
 
 jQuery(function () {
+    // blocco il pulsante per evitare inserimenti sbagliati
+    jQuery("#btnInserisci").prop("disabled", true);
+    jQuery("#txtNome , #txtCognome").on("focus", function () {
+        jQuery("#btnInserisci").removeAttr("disabled"); // quando uno dei due campi input viene focussato allora il pulsante si sblocca
+    });
+        // controllo se è stato premuto il pulsante
     jQuery("#btnInserisci").on("click", function() {
         const nome = document.getElementById("txtNome").value;
         const cognome = document.getElementById("txtCognome").value;
         verify(nome, cognome);
-
         // pulisco i campi di input
         document.getElementById("txtNome").value = "";
         document.getElementById("txtCognome").value = "";
-
+        if (indiceNominativi > 0) {
+            if (nominativi[indiceNominativi - 2] != nominativi[indiceNominativi - 1]) {
+                blocco = jQuery("<p>" + nominativi[indiceNominativi - 1] + "</p>");
+                blocco.addClass("inseriti");
+                blocco.appendTo("#div7");
+            } else {
+                blocco = jQuery("<p>inputError</p>");
+                blocco.addClass("inseriti");
+                blocco.appendTo("#div7");
+            }
+        }
         // tolgo l'attributo disabled per la visualizzazione della list group
         jQuery("#btnListGroup").removeAttr("disabled");
-
-        if (nominativi.length > 0) {
-            blocco = jQuery("<p>" + nominativi[nominativi.length - 1] + "</p>");
-            blocco.addClass("inseriti");
-            blocco.appendTo("#div7");
-        }
     });
     
+    
     jQuery("#btnListGroup").on("click", function() {
-        if (inseriti.length != 0) {
-            blocco = jQuery("<li>" + inseriti[indice - 1].nome + " " + inseriti[indice - 1].cognome + "</li>")
-            blocco.addClass("listElement");
-            blocco.appendTo("#list");
+        if (indiceInseriti != 0) {
+            for (let valore of inseriti) {
+                blocco = jQuery("<li>" + valore.nome + " " + valore.cognome + "</li>")
+                blocco.addClass("listElement");
+                blocco.appendTo("#list");
+            }
         }
         jQuery("#list").removeAttr("hidden");
         jQuery("#btnListGroup").prop("disabled", true);
@@ -57,12 +70,13 @@ function verify(nome, cognome) {
             }
             // se la prima è una vocale allora la aggiungo ai nominativi
             if (vale) {
-                nominativi[indice] = nome + " " + cognome;
+                nominativi[indiceNominativi] = nome + " " + cognome;
+                indiceNominativi++;
             }
             // creo un oggetto e lo inserisco dentro l'array di oggetti
             var daSalvare = {"nome" : nome, "cognome" : cognome};
-            inseriti[indice] = daSalvare;
-            indice++;
+            inseriti[indiceInseriti] = daSalvare;
+            indiceInseriti++;
         } else {
             activeModalError("il nome <b>'" + arguments[0] + "'</b> contiene un numero!");
         }
