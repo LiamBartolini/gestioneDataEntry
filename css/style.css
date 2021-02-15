@@ -1,0 +1,83 @@
+.col {
+    margin: 2%;
+    border: 1px solid black;
+}
+
+#cell1-2 { height: 150px; }
+#cell3-5 { height: 130px; }
+#input-col {
+    margin-bottom: 0px;
+    margin-right: 2%;
+    height: fit-content;
+}
+
+#cella1, #cella2 { margin: 0px; }
+#cella2 { margin-left: 5%; margin-right: 2%; }
+#cella1 { margin-left: 2%; }
+
+#div7 {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.inseriti {
+    margin-top: 1%;
+    border: 1px solid black;
+    text-align: center;
+    margin-left: 10%;
+}
+
+form { margin-top: 2%; }
+
+#btnInserisci { margin: 2%; text-align: center; }
+#prima-riga > input { margin-left: 7%; }
+#seconda-riga > input { margin-left: 3%; }
+
+#btnChiSiamo { width: max-content; }
+
+#input-form {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#nominativi { margin: none; margin-left: 20%; }
+#navbar li { 
+    margin-top: 5px;
+    margin-left: 28%;
+    text-align: center;
+}
+
+/* breakpoint per l'hamburger menu */
+@media screen and (max-width: 1200px) {
+    #navbar li { margin-left: 0px; margin-top: 2%; text-align: left; }
+}
+
+@media screen and (max-width: 768px) {
+    #div7 {
+        margin-top: 3%;
+        margin-left: 2%;
+        height: auto;
+    }
+    #nominativi {
+        width: 100%;
+        margin: 0px;
+        text-align: center;
+    }
+}
+
+.col[class$="input"] {
+    border: none;
+    height: auto;
+}
+
+#rowCognome { margin-bottom: 10%; }
+#nome, #cognome { text-align: left; width: 100%; }
+#prova { padding-left: 1%; }
+
+#list {
+    border: none;
+}
+
+ul li {
+    list-style: none;
+}

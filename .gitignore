@@ -1,0 +1,5 @@
+# ignoro il fil .json della intelisense
+*.json
+
+# ignoro la cartella node_modules
+[Nn]ode_modules/
