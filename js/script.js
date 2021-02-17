@@ -8,44 +8,49 @@ var blocco;
 var firstClick = false;
 var nome, cognome;
 
-jQuery(function () {
+(function() {
     // blocco il pulsante per evitare inserimenti sbagliati
-    jQuery("#btnInserisci").prop("disabled", true);
-    jQuery("#txtNome , #txtCognome").on("focus", function () {
-        jQuery("#btnInserisci").removeAttr("disabled"); // quando uno dei due campi input viene focussato allora il pulsante si sblocca
+    document.getElementById("btnInserisci").setAttribute("disabled", true);
+    
+    document.getElementById("txtNome").addEventListener("focus", function () {
+        // quando uno dei due campi input viene focussato allora il pulsante si sblocca
+        document.getElementById("btnInserisci").removeAttribute("disabled");
     });
+
     // controllo se è stato premuto il pulsante
-    jQuery("#btnInserisci").on("click", function() {
+    document.getElementById("btnInserisci").addEventListener("click", function() {
         nome = document.getElementById("txtNome").value;
         cognome = document.getElementById("txtCognome").value;
-
+    
         if (nome.length >= 2 && cognome.length >= 2) {
             if (checkString(nome) && checkString(cognome)) {
-                activeModalConferma("Confermare l'inserimento");
+                document.getElementById("triggerModalConferma").click();
             } else {
-                activeModalError("il nome/cognome <b>'" + nome + " " + cognome + "'</b> contiene un numero!");
+                document.getElementById("triggerModalErrore").click();
             }
         } else {
-            activeModalError("Lunghezza <b>'" + nome + " " + cognome + "'</b> troppo corta");
+            document.getElementById("triggerModalErrore").click();
         }
-
+    
         // pulisco i campi di input
         document.getElementById("txtNome").value = "";
         document.getElementById("txtCognome").value = "";
-
+    
         // tolgo l'attributo disabled per la visualizzazione della list group
-        jQuery("#btnListGroup").removeAttr("disabled");
+        document.getElementById("btnListGroup").removeAttribute("disabled");
     });
     
-    jQuery("#btnAccetta").on("click", function () { 
+    document.getElementById("btnAccetta").addEventListener("click", function () {
         // se accetta inserisco il nominativo
         if (verifyFirstChar(nome, cognome)) {
             // se la prima è una vocale allora la aggiungo ai nominativi
             nominativi[indiceNominativi] = nome + " " + cognome;
             indiceNominativi++;
-            blocco = jQuery("<p>" + nominativi[indiceNominativi - 1] + "</p>");
-            blocco.addClass("inseriti");
-            blocco.appendTo("#div7");
+            var div = document.getElementById("div7");
+            blocco = document.createElement('p');
+            blocco.className = "inseriti";
+            blocco.innerHTML = nominativi[indiceNominativi - 1]
+            div.appendChild(blocco);
         }
 
         // salvo il nome e cognome come oggetto
@@ -54,25 +59,27 @@ jQuery(function () {
         indiceInseriti++;
     });
     
-    jQuery("#btnListGroup").on("click", function() {
+    document.getElementById("btnListGroup").addEventListener("click", function () {
+        var list = document.getElementById("list");
         // controllo se è la prima volta che premo il pulsante per vedere la list gruop
         if (firstClick) {
-            blocco = jQuery("<li>" + inseriti[indiceInseriti - 1].nome + " " + inseriti[indiceInseriti - 1].cognome + "</li>")
-            blocco.addClass("listElement");
-            blocco.appendTo("#list");    
+            blocco = document.createElement("li");
+            blocco.className = "listElement";
+            blocco.innerHTML = inseriti[indiceInseriti - 1].nome + " " + inseriti[indiceInseriti - 1].cognome;
+            list.appendChild(blocco);
         } else {
             for (let i = 0; i < inseriti.length; i++) {
-                blocco = jQuery("<li>" + inseriti[i].nome + " " + inseriti[i].cognome + "</li>")
-                blocco.addClass("listElement");
-                blocco.appendTo("#list");
+                blocco = document.createElement("li");
+                blocco.className = "listElement";
+                blocco.innerHTML = inseriti[i].nome + " " + inseriti[i].cognome;
+                list.appendChild(blocco);
             }
             firstClick = true;
         }
-
-        jQuery("#list").removeAttr("hidden");
-        jQuery("#btnListGroup").prop("disabled", true);
+        document.getElementById("list").removeAttribute("hidden");
+        document.getElementById("btnListGroup").setAttribute("disabled", true);
     });
-});
+})();
 
 function verifyFirstChar(nome, cognome) {
     var vocali = ['A', 'E', 'I', 'O', 'U'];
@@ -84,16 +91,6 @@ function verifyFirstChar(nome, cognome) {
         }
     }
     return false;
-}
-
-function activeModalConferma(testo) {
-    jQuery("#testo-modal").html(testo);
-    jQuery("#modal-conferma").modal("toggle");
-}
-
-function activeModalError(testo) {
-    jQuery("#modal-error-text").html(testo);
-    jQuery("#error-modal").modal("toggle");
 }
 
 function checkString() {
